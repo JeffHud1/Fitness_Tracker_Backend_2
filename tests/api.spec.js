@@ -37,6 +37,7 @@ describe('API', () => {
       let tooShortSuccess, tooShortResponse;
       beforeAll(async() => {
         const successResponse = await axios.post(`${API_URL}/api/users/register`, newUser);
+        // console.log("test response",successResponse)
         registeredUser = successResponse.data.user;
         try {
           tooShortSuccess = await axios.post(`${API_URL}/api/users/register`, newUserShortPassword);
@@ -68,9 +69,13 @@ describe('API', () => {
           duplicateErrResp = err.response;
         }
         expect(duplicateSuccess).toBeFalsy();
+        // console.log("Duplicate success",duplicateSuccess)
         expect(duplicateErrResp.data).toBeTruthy();
+        // console.log("duplicateErrResp", duplicateErrResp)
       });
       it('Throws errors for password-too-short.', async () => {
+        // console.log("tooShortSuccess", tooShortSuccess)
+        // console.log("tooShortResponse", tooShortResponse)
         expect(tooShortSuccess).toBeFalsy();
         expect(tooShortResponse.data).toBeTruthy();
       });
@@ -91,7 +96,8 @@ describe('API', () => {
       it('sends back users data if valid token is supplied in header', async () => {
         const {data} = await axios.get(`${API_URL}/api/users/me`, {
           headers: {'Authorization': `Bearer ${token}`}
-        });        
+        });
+        // console.log("Users/me test data:",data)
         expect(data.username).toBeTruthy();
         expect(data.username).toBe(registeredUser.username);
       });
