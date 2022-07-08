@@ -32,25 +32,16 @@ routineActivitiesRouter.patch('/:routineActivityId', async(req, res, next)=>{
 routineActivitiesRouter.delete('/:routineActivityId', async(req, res, next)=>{
     try {
         const auth = req.headers.authorization
-        const requestId = req.params.routineActivityId
+        const requestId = Number(req.params.routineActivityId)
         const userId = req.user.id
-        // console.log("Headers incoming",auth)
-        // console.log("type of auth`",typeof auth)
-        // console.log("incoming request id", requestId)
-        // console.log("type of id`",typeof requestId)
         const userConfirmation = await canEditRoutineActivity(requestId, userId)
 
-        if(auth !== undefined){
             if(userConfirmation){
                 const toBeDeleted = await destroyRoutineActivity(requestId)
-                console.log('to be deleted', toBeDeleted)
                 res.send(toBeDeleted)
             }else{
                 throw new Error
             }
-        }else{
-            throw new Error
-        }
     } catch (error) {
         next(error)
     }
